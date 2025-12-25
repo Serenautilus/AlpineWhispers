@@ -7,13 +7,13 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.FogRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import net.satisfy.alpinewhispers.neoforge.core.config.AlpineWhispersClientConfig;
 
 @Mixin(FogRenderer.class)
 public class FogRendererMixin {
@@ -31,10 +31,15 @@ public class FogRendererMixin {
             return;
         }
 
-        BlockPos cameraPos = camera.getBlockPosition();
-        Biome biome = level.getBiome(cameraPos).value();
+        if (!AlpineWhispersClientConfig.snowFogEnabled.get()) {
+            alpinewhispers_cachedFogEnd = -1.0F;
+            alpinewhispers_biomeFogFactor = 0.0F;
+            return;
+        }
 
-        boolean isColdBiome = biome.coldEnoughToSnow(cameraPos);
+        BlockPos cameraPos = camera.getBlockPosition();
+
+        boolean isColdBiome = level.getBiome(cameraPos).value().coldEnoughToSnow(cameraPos);
         float biomeTransitionSpeed = 0.05F;
 
         if (isColdBiome) {
@@ -56,11 +61,13 @@ public class FogRendererMixin {
         boolean isSnowing = level.isRaining();
         boolean isThundering = level.isThundering();
 
-        final var clamped = alpineWhispers$getClamped(sunHeight, isSnowing, isThundering);
+        float clamped = alpineWhispers$getClamped(sunHeight, isSnowing, isThundering);
+        float strength = (float) (double) AlpineWhispersClientConfig.snowFogStrength.get();
+        clamped = Mth.clamp(clamped * strength, 0.0F, 0.95F);
 
         float start = 0.0F;
 
-        float timeOfDay = level.getDayTime() % 24000L;
+        long timeOfDay = level.getDayTime() % 24000L;
 
         float minEnd;
         float maxEnd;

@@ -16,6 +16,7 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.satisfy.alpinewhispers.AlpineWhispers;
 import net.satisfy.alpinewhispers.core.registry.EntityTypeRegistry;
+import net.satisfy.alpinewhispers.fabric.core.config.AlpineWhispersClientConfig;
 import net.satisfy.alpinewhispers.fabric.core.world.AlpineWhispersFabricWorldgen;
 
 import java.util.Optional;
@@ -25,6 +26,7 @@ public class AlpineWhispersFabric implements ModInitializer {
     public void onInitialize() {
         AlpineWhispers.init();
         AlpineWhispersFabricWorldgen.init();
+        AlpineWhispersClientConfig.load();
         addSpawns();
     }
 

@@ -7,8 +7,8 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.FogRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
+import net.satisfy.alpinewhispers.fabric.core.config.AlpineWhispersClientConfig;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -31,10 +31,15 @@ public class FogRendererMixin {
             return;
         }
 
-        BlockPos cameraPos = camera.getBlockPosition();
-        Biome biome = level.getBiome(cameraPos).value();
+        if (!AlpineWhispersClientConfig.snowFogEnabled) {
+            alpinewhispers_cachedFogEnd = -1.0F;
+            alpinewhispers_biomeFogFactor = 0.0F;
+            return;
+        }
 
-        boolean isColdBiome = biome.coldEnoughToSnow(cameraPos);
+        BlockPos cameraPos = camera.getBlockPosition();
+
+        boolean isColdBiome = level.getBiome(cameraPos).value().coldEnoughToSnow(cameraPos);
         float biomeTransitionSpeed = 0.05F;
 
         if (isColdBiome) {
@@ -56,11 +61,13 @@ public class FogRendererMixin {
         boolean isSnowing = level.isRaining();
         boolean isThundering = level.isThundering();
 
-        final var clamped = alpineWhispers$getClamped(sunHeight, isSnowing, isThundering);
+        float clamped = alpineWhispers$getClamped(sunHeight, isSnowing, isThundering);
+        float strength = (float) AlpineWhispersClientConfig.snowFogStrength;
+        clamped = Mth.clamp(clamped * strength, 0.0F, 0.95F);
 
         float start = 0.0F;
 
-        float timeOfDay = level.getDayTime() % 24000L;
+        long timeOfDayValue = level.getDayTime() % 24000L;
 
         float minEnd;
         float maxEnd;
@@ -71,10 +78,10 @@ public class FogRendererMixin {
         } else if (isSnowing) {
             minEnd = 5.5F;
             maxEnd = viewDistance * 0.45F;
-        } else if (timeOfDay >= 13000L && timeOfDay <= 23000L) {
+        } else if (timeOfDayValue >= 13000L && timeOfDayValue <= 23000L) {
             minEnd = 3.0F;
             maxEnd = viewDistance * 0.125F;
-        } else if (timeOfDay >= 6000L) {
+        } else if (timeOfDayValue >= 6000L) {
             minEnd = 4.5F;
             maxEnd = viewDistance * 0.3F;
         } else {

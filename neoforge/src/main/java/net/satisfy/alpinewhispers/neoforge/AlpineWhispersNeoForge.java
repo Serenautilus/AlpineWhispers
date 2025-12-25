@@ -6,11 +6,13 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import net.satisfy.alpinewhispers.AlpineWhispers;
 import net.satisfy.alpinewhispers.core.registry.CompostableRegistry;
 import net.satisfy.alpinewhispers.core.registry.EntityTypeRegistry;
+import net.satisfy.alpinewhispers.neoforge.core.config.AlpineWhispersClientConfig;
 
 import java.util.Objects;
 
@@ -19,6 +21,9 @@ public class AlpineWhispersNeoForge {
 
     public AlpineWhispersNeoForge(ModContainer modContainer, final IEventBus modEventBus) {
         AlpineWhispers.init();
+
+        modContainer.registerConfig(ModConfig.Type.CLIENT, AlpineWhispersClientConfig.SPEC);
+
         Objects.requireNonNull(modContainer.getEventBus()).addListener(this::onRegisterSpawnPlacement);
         modEventBus.addListener(this::commonSetup);
     }

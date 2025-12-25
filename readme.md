@@ -1,13 +1,22 @@
-<p align="center"><img src="https://imgur.com/RRfGT1P.png" width="1200"></p>
+<p align="center">
+  <img src="./LOGO.png" width="1200">
+</p>
 
 <div style="text-align: center;">
 
-<p>The farm calls: Experience the art of advanced agriculture and farmhouse cuisine! Use mincers, cooking pots, as well as new grains and fruit varieties to enhance your culinary and farming expertise.</p>
+<p>Bundle up. We're heading into the mountains!</p>
 
-<br> 
+<br>
 
-<p>Refined farming and cooking with new tools, functional blocks, and arolla_pine meals. Use sprinklers, scarecrows, and fertilized soil to improve crops. Process food with a mincer, transport goods with carts, and prepare simple farmhouse dishes. </p>
+<p>Alpine Whispers invites you into a snow-covered highland world inspired by the Central European Alps. Discover new wildlife, reworked snowy landscapes, and cozy alpine architecture that brings warmth to even the coldest biomes.</p>
 
+<br>
+
+<p>Encounter Alpine Sheep with unique wool, ride through the mountains on Reindeer with a friend, and explore enhanced Snowy Plains and Groves filled with richer terrain and vegetation. Build with traditional timber-inspired blocks, decorate with icicles and wreaths, and create inviting winter retreats high above the valleys.</p>
+
+<br>
+
+<p>Have fun exploring this chilly, festive mountain adventure.</p>
 </div>
 
 <h1 align="center">Be Part of Our Journey</h1>
