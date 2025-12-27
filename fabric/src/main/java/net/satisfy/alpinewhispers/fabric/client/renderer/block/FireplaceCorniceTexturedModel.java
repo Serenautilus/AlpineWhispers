@@ -1,5 +1,6 @@
 package net.satisfy.alpinewhispers.fabric.client.renderer.block;
 
+import net.fabricmc.fabric.api.renderer.v1.material.RenderMaterial;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
@@ -43,6 +44,7 @@ public class FireplaceCorniceTexturedModel implements BakedModel, FabricBakedMod
     public void emitBlockQuads(BlockAndTintGetter level, BlockState state, BlockPos pos, Supplier<RandomSource> random, RenderContext context) {
         if (EMITTING.get()) return;
         EMITTING.set(true);
+        RenderMaterial mat = context.getEmitter().material();
 
         if (!hasApplied(state)) {
             RandomSource r0 = random.get();
@@ -50,7 +52,7 @@ public class FireplaceCorniceTexturedModel implements BakedModel, FabricBakedMod
                 List<BakedQuad> qs = original.getQuads(state, face, r0);
                 for (BakedQuad q : qs) {
                     QuadEmitter e = context.getEmitter();
-                    e.fromVanilla(q, null, face);
+                    e.fromVanilla(q, mat, face);
                     e.emit();
                 }
             }
@@ -58,7 +60,7 @@ public class FireplaceCorniceTexturedModel implements BakedModel, FabricBakedMod
                 List<BakedQuad> qs = original.getQuads(state, null, r0);
                 for (BakedQuad q : qs) {
                     QuadEmitter e = context.getEmitter();
-                    e.fromVanilla(q, null, null);
+                    e.fromVanilla(q, mat, null);
                     e.emit();
                 }
             }
@@ -82,7 +84,7 @@ public class FireplaceCorniceTexturedModel implements BakedModel, FabricBakedMod
             for (BakedQuad q : qs) {
                 TextureAtlasSprite src = q.getSprite();
                 QuadEmitter e = context.getEmitter();
-                e.fromVanilla(q, null, face);
+                e.fromVanilla(q, mat, face);
                 float su0 = src.getU0(), su1 = src.getU1(), sv0 = src.getV0(), sv1 = src.getV1();
                 float du = su1 - su0, dv = sv1 - sv0;
                 for (int i = 0; i < 4; i++) {
@@ -100,7 +102,7 @@ public class FireplaceCorniceTexturedModel implements BakedModel, FabricBakedMod
             for (BakedQuad q : qs) {
                 TextureAtlasSprite src = q.getSprite();
                 QuadEmitter e = context.getEmitter();
-                e.fromVanilla(q, null, null);
+                e.fromVanilla(q, mat, null);
                 float su0 = src.getU0(), su1 = src.getU1(), sv0 = src.getV0(), sv1 = src.getV1();
                 float du = su1 - su0, dv = sv1 - sv0;
                 for (int i = 0; i < 4; i++) {
